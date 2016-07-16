@@ -1,0 +1,14 @@
+.gradle
+.idea
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/app/build
+.DS_Store
+/build
+/gradle
+/gradlew
+gradlew.bat
+local
+AsTestProj.iml
+
