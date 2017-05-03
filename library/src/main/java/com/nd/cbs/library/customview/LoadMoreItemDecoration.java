@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.nd.cbs.library.R;
+import com.nd.cbs.library.customview.util.SystemUtil;
 
 
 /**
@@ -38,16 +39,16 @@ public class LoadMoreItemDecoration extends RecyclerView.ItemDecoration {
         final View child = recyclerView.getChildAt( childSize - 1 ) ;
         RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) child.getLayoutParams();
         final int top = child.getBottom() + layoutParams.bottomMargin ;
-        final int bottom = top + dip2px(recyclerView.getContext(),50) ;
+        final int bottom = top + SystemUtil.dip2px(recyclerView.getContext(),50) ;
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);// 抗锯齿
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);// 增强消除锯齿
         paint.setStrokeWidth(3);// 设置画笔的宽度
-        paint.setTextSize(40);// 设置文字的大小
+        paint.setTextSize(recyclerView.getContext().getResources().getDimension(R.dimen.loading_text));// 设置文字的大小
         paint.setColor(Color.BLACK);// 设置画笔颜色
 
-        String text = "正在加载···";
+        String text = recyclerView.getContext().getString(R.string.pullup_loading);
 
         if(null == mProgressBmp) {
             mProgressBmp = BitmapFactory.decodeResource(recyclerView.getResources(), R.drawable.general_load_small);
@@ -58,11 +59,12 @@ public class LoadMoreItemDecoration extends RecyclerView.ItemDecoration {
 
         float textWidth = paint.measureText(text,0,text.length());
         //计算文本绘制坐标
-        int x = (int) (left + (right-left-diameter-12-textWidth) / 2);
+        int margin = SystemUtil.dip2px(recyclerView.getContext(),5);
+        int x = (int) (left + (right-left-diameter-margin-textWidth) / 2) + diameter + margin;
         int y = (int) (top + (bottom - top) / 2 - (paint.ascent() + paint.descent()) / 2);
         c.drawText(text,x,y,paint);
 
-        float pivotX = x - 12 - diameter / 2;
+        float pivotX = x - margin - diameter / 2;
         float pivotY = top + (bottom - top) / 2;
         c.save();
         c.rotate(mRotateDegree,pivotX,pivotY);
@@ -86,7 +88,7 @@ public class LoadMoreItemDecoration extends RecyclerView.ItemDecoration {
         int lastVisibleIndex = parent.getChildAdapterPosition(view);
         if(lastVisibleIndex == (adapter.getItemCount()-1)) {
 //            Log.d(TAG,"lastVisibleItemIndex is " + lastVisibleIndex + ",adapter last index is " + (adapter.getItemCount()-1));
-            outRect.set(0,0,0,dip2px(parent.getContext(),50));
+            outRect.set(0,0,0, SystemUtil.dip2px(parent.getContext(),50));
         }
     }
 
@@ -94,10 +96,7 @@ public class LoadMoreItemDecoration extends RecyclerView.ItemDecoration {
         return ((LinearLayoutManager)manager).findLastVisibleItemPosition();
     }
 
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
+
 
 
 }

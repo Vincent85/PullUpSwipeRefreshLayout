@@ -27,7 +27,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText("this is " + position);
-//        Log.d(TAG,"current TextView content is " + "this is " + position);
     }
 
     @Override
